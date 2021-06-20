@@ -5,4 +5,4 @@ CodeCombat is a programming learning platform aimed at beginners, students, and/
 https://codecombat.com/
 
 ## Motivation
-I used this just to play around with javascript and tell myself I'm studying, but could still play some computer game.
+I use this just to play around with javascript and tell myself I'm studying, but could still play some computer game.
