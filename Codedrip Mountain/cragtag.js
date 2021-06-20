@@ -7,10 +7,13 @@ while(true) {
     if (pender) {
         // moveXY() will move to where Pender is,
         // but she'll have moved away by the time you get there.
-        hero.moveXY(pender.pos.x, pender.pos.y);
+        //hero.moveXY(pender.pos.x, pender.pos.y);
         
         // move() only moves one step at a time,
         // so you can use it to track your target.
-        //hero.move(pender.pos);
+        //hero.jumpTo({x: pender.pos.x, y:pender.pos.y});
+        // hero.jumpTo(pender);
+        hero.move(pender.pos);
+        
     }
 }
