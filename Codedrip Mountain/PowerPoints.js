@@ -31,9 +31,13 @@ for (var i = 0; i < powerMap.length; i++) {
             hero.say("VENI");
             var item = hero.findNearestItem();
             var enemy = hero.findNearestEnemy();
-            while (enemy && enemy.health > 0)
-            {
-                hero.attack(enemy);
+            if (item) {
+                hero.moveXY(item.pos.x, item.pos.y);
+            } else if (enemy) {
+                while (enemy && enemy.health > 0)
+                {
+                    hero.attack(enemy);
+                }
             }
         }
     }
