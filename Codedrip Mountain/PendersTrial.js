@@ -23,10 +23,10 @@ function pickUpCoin(unit) {
         }
     }
     if (items_nah != []) {
-         items_nah.sort(compare);
-         if (items_nah[0]) {hero.command(unit, "move", {x:items_nah[0].pos.x, y:items_nah[0].pos.y});}
+        items_nah.sort(compare);
+        if (items_nah[0]) {hero.command(unit, "move", {x:items_nah[0].pos.x, y:items_nah[0].pos.y});} else {
         var item = unit.findNearestItem();
-        hero.command(unit, "move", {x:items_nah[0].pos.x, y:items_nah[0].pos.y});
+        hero.command(unit, "move", item.pos);}
     }
 }
 
