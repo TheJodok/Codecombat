@@ -1,15 +1,7 @@
-  
-// my stuff:
-//  - sword - Runesword (need to fast kill cacaput)
-//  - Ring of Speed + Boots of Leaping (to run fasster, my maxspeed is 13)
-//  - Twilight Glasses (max range, to gattering all friends in Gate 2)
-//  - Enameled Dragonplate Set (Helmet + Armor) (to get healt)
-//  - Second Ring - tarnished copper band (to more healt, so starting healt is 3861)
-// my hero: Captain Anya Weston
 
-function moveArmies(x, y) {
+function moveArmies(x, y, aktion) {
     for (var i = 0; i < aFriends.length; i++) {
-        hero.command(aFriends[i], "defend", {
+        hero.command(aFriends[i], aktion, {
             'x': x,
             'y': y
         });
@@ -28,65 +20,118 @@ function findAndKill(sType) {
 // store first grup of Army
 var aFriends = hero.findFriends();
 // frist order, defend start position
-moveArmies(hero.pos.x, hero.pos.y);
+moveArmies(hero.pos.x, hero.pos.y, "defend");
 
 //#Gate 0.
 // first destroy catapult
 var catas = hero.findByType("catapult");
 for (var cata in catas) {
-    hero.attack(catas[cata]);
+    while (catas[cata].health > 0) {
+        hero.attack(catas[cata]);
+    }
 }
 
 // move army next
-moveArmies(121, 33);
+//moveArmies(121, 33);
+moveArmies(80, 33, "move");
 
-while (true) {
-
-    //#Gate 4
-    if (hero.health < 1500 && hero.pos.x > 270) {
-        // if we fill wrong, escape, Army shuld kill all
-        hero.moveXY(279, 22);
-        continue;
-    }
-
-    //#Gate 3 end
-    // kill top enemy by order
-    if (findAndKill("warlock"))
-        continue;
-    if (findAndKill("witch"))
-        continue;
-    if (findAndKill("skeleton"))
-        continue;
-    // next collect all precious
-    var item = hero.findNearestItem();
-    if (item && item.type == "gem" && hero.distanceTo(item) < 50) {
-        hero.move(item.pos);
-        moveArmies(285, 33);
-        continue;
-    }
-
+//Verschnaufpause und kill den rest
+while(true) {
     var enemy = hero.findNearestEnemy();
-    if (enemy && hero.distanceTo(enemy) < 50) {
-        // default rules is kill all, so herro shuld be move on right
+    if (enemy.type != "door") {
         hero.attack(enemy);
     } else {
-        if (hero.pos.x < 270 && hero.health > 3800) {
-            //#Gate 3 begin
-            // store first and second grup of Army 
-            aFriends = hero.findFriends();
-            hero.moveXY(169, 34);
-            hero.moveXY(180, 12);
-            moveArmies(hero.pos.x, hero.pos.y);
-            hero.moveXY(245, 27);
-            moveArmies(hero.pos.x, hero.pos.y);
-            hero.moveXY(268, 34);
-            moveArmies(285, 33);
-            hero.moveXY(278, 49);
+        hero.say("No Enemies");
+        break;
+    }
+}
+
+hero.moveXY(82, 33);
+
+//how many enemies?
+var checken = hero.findEnemies();
+if (checken.length === 3) {
+    hero.say("Room Clean");
+    var tore = checken;
+}
+
+// Clean Room 1
+hero.attack(tore[0]);
+
+//move Back to kill enemies
+hero.moveXY(70, 33);
+moveArmies(60, 33, "defend");
+
+//kill enemies
+var enemies = hero.findEnemies();
+for (var e in enemies) {
+    if (enemies[e].type != "door" && enemies[e].type != "tower" && enemies[e].health > 0) {
+        hero.attack(enemies[e]);
+    }
+    moveArmies(90, 33, "defend");
+}
+
+//Hero, Palas attack tower
+var turme = hero.findByType("tower");
+hero.say(turme + " test");
+var palas = hero.findByType("paladin");
+for (var t in turme) {
+    while(turme[t].health > 0) {
+        hero.attack(turme[t]);
+        if (hero.health < 600) {
+            for (var p in palas) {
+                hero.command(palas[p], "attack", turme[t]);
+            }
         }
     }
-    if (hero.pos.x > 283) {
-        //#Gate 4
-        moveArmies(300, 34);
-    }
-
 }
+
+hero.say("Room is clean");
+moveArmies(145, 33, "move");
+for (var p in palas) {
+    hero.command(palas[p], "cast", "heal", hero);
+}
+
+// Clean Room 2
+while (tore[1].health > 0) {hero.attack(tore[1]);}
+moveArmies(242, 33, "defend");
+var enemies = hero.findEnemies();
+for (var e in enemies) {
+    if (enemies[e].type != "door" &&  enemies[e].health > 0) {
+        hero.attack(enemies[e]);
+    }
+}
+
+var palas = hero.findByType("paladin");
+for (var p in palas) {
+    hero.command(palas[p], "cast", "heal", hero);
+}
+var aFriends = hero.findFriends();
+moveArmies(270, 35, "defend");
+hero.moveXY(270, 33);
+
+var warlos = hero.findByType("warlock");
+for (var u in aFriends) { hero.command(aFriends[u], "attack", warlos[1]); }
+while (warlos[0].health > 0) {
+        hero.attack(warlos[0]);
+    }
+moveArmies(270, 35, "defend");
+hero.moveXY(250, 33);
+var palas = hero.findByType("paladin");
+for (var p in palas) {
+    hero.command(palas[p], "cast", "heal", hero);
+}
+var enemies = hero.findEnemies();
+for (var e in enemies) {
+    if (enemies[e].type != "door" && enemies[e].health > 0) {
+        hero.attack(enemies[e]);
+    }
+}
+while(true) {
+    for (var p in palas) { hero.command(palas[p], "cast", "heal", hero);}
+    moveArmies(3000, 35, "defend");
+    var enemy = hero.findNearestEnemy();
+    hero.attack(enemy);
+}
+
+
