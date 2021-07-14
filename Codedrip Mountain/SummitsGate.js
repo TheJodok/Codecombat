@@ -128,8 +128,18 @@ for (var e in enemies) {
     }
 }
 while(true) {
+    var aFriends = hero.findFriends();
+    var palas = hero.findByType("paladin");
+    var grifis = hero.findByType("griffin-rider");
+    if (hero.gold > 50) {hero.summon("griffin-rider");}
+    for (var g in grifis) { 
+        if (grifis[g].pos < 288) {
+            hero.command(grifis[g], "move", {x: 275,y: 50});
+            hero.command(grifis[g], "move", {x: 275,y: 38});
+        }
+    }
     for (var p in palas) { hero.command(palas[p], "cast", "heal", hero);}
-    moveArmies(3000, 35, "defend");
+    moveArmies(300, 35, "defend");
     var enemy = hero.findNearestEnemy();
     hero.attack(enemy);
 }
