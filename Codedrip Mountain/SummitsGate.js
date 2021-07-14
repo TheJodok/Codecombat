@@ -1,4 +1,3 @@
-
 function moveArmies(x, y, aktion) {
     for (var i = 0; i < aFriends.length; i++) {
         hero.command(aFriends[i], aktion, {
