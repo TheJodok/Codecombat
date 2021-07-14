@@ -142,6 +142,7 @@ while(true) {
     moveArmies(300, 35, "defend");
     var enemy = hero.findNearestEnemy();
     hero.attack(enemy);
+    if (hero.health < hero.maxHealth / 6) {hero.shield();}
 }
 
 
